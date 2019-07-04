@@ -1,0 +1,120 @@
+USE [personeltakip]
+GO
+/****** Object:  Table [dbo].[appSettings]    Script Date: 4.7.2019 23:09:45 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[appSettings](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[settingsKey] [varchar](50) NULL,
+	[settingsValue] [varchar](max) NULL,
+ CONSTRAINT [PK_appSettings] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[Bolum]    Script Date: 4.7.2019 23:09:45 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Bolum](
+	[bolumID] [int] IDENTITY(1,1) NOT NULL,
+	[bolumAdi] [nvarchar](50) NULL,
+	[isAdmin] [bit] NULL,
+ CONSTRAINT [PK_Bolum] PRIMARY KEY CLUSTERED 
+(
+	[bolumID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Izin]    Script Date: 4.7.2019 23:09:45 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Izin](
+	[izinID] [int] IDENTITY(1,1) NOT NULL,
+	[personelID] [int] NULL,
+	[baslamaTarihi] [datetime] NULL,
+	[bitisTarihi] [datetime] NULL,
+	[durum] [smallint] NULL CONSTRAINT [DF_Izin_durum]  DEFAULT ((1)),
+	[islemTarihi] [datetime] NULL,
+	[onaylayan] [nvarchar](50) NULL,
+	[onayTarihi] [datetime] NULL,
+	[aciklama] [nvarchar](max) NULL,
+	[izinTuru] [int] NULL,
+	[toplamGun] [nchar](10) NULL,
+	[toplamSaat] [nchar](10) NULL,
+	[ulasKisi] [nvarchar](50) NULL,
+ CONSTRAINT [PK_Izin] PRIMARY KEY CLUSTERED 
+(
+	[izinID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Personel]    Script Date: 4.7.2019 23:09:45 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Personel](
+	[personelID] [int] IDENTITY(1,1) NOT NULL,
+	[bolumID] [int] NULL,
+	[RolID] [int] NULL,
+	[ad] [varchar](50) NULL,
+	[soyad] [varchar](50) NULL,
+	[email] [nvarchar](50) NULL,
+	[sifre] [nvarchar](50) NULL,
+	[tel] [nvarchar](50) NULL,
+	[dogumTarihi] [date] NULL,
+	[Engel] [bit] NULL CONSTRAINT [DF_Personel_Engel]  DEFAULT ((0)),
+	[Aktif] [bit] NULL CONSTRAINT [DF_Personel_Aktif]  DEFAULT ((1)),
+	[isAdmin] [bit] NULL,
+ CONSTRAINT [PK_Personel] PRIMARY KEY CLUSTERED 
+(
+	[personelID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[Rol]    Script Date: 4.7.2019 23:09:45 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Rol](
+	[RolID] [int] IDENTITY(1,1) NOT NULL,
+	[Adi] [nvarchar](50) NULL,
+	[UstRolId] [int] NULL,
+	[isDefault] [bit] NULL CONSTRAINT [DF_Rol_idDefault]  DEFAULT ((0)),
+ CONSTRAINT [PK_Rol] PRIMARY KEY CLUSTERED 
+(
+	[RolID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+ALTER TABLE [dbo].[Personel]  WITH CHECK ADD  CONSTRAINT [FK_Personel_Bolum] FOREIGN KEY([bolumID])
+REFERENCES [dbo].[Bolum] ([bolumID])
+GO
+ALTER TABLE [dbo].[Personel] CHECK CONSTRAINT [FK_Personel_Bolum]
+GO
+ALTER TABLE [dbo].[Personel]  WITH CHECK ADD  CONSTRAINT [FK_Personel_Rol] FOREIGN KEY([RolID])
+REFERENCES [dbo].[Rol] ([RolID])
+GO
+ALTER TABLE [dbo].[Personel] CHECK CONSTRAINT [FK_Personel_Rol]
+GO
