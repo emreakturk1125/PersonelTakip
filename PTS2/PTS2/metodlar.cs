@@ -12,7 +12,7 @@ namespace PTS2
 
         public SqlConnection baglan()
         {
-            SqlConnection baglanti = new SqlConnection("data source = EMREE-BILG\\MSSQL2014 ; initial catalog = personeltakip; integrated security = true");
+            SqlConnection baglanti = new SqlConnection("Data Source=EMRE-BILG\\MSSQL2014;Initial Catalog=personeltakip;User ID=sa;Password=emre123+-;");
             baglanti.Open();
             return (baglanti);
         }

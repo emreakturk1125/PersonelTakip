@@ -41,16 +41,15 @@ namespace PTS2
             {
             SqlCommand cmd = new SqlCommand("select * from Personel where email=@email and sifre=@sifre");
 
-            //cmd.CommandText = "select * from Personel where email=@email and sifre=@sifre and bolumID = @bolumID";
+            cmd.CommandText = "select * from Personel where email=@email and sifre=@sifre";
             //cmd.Parameters.AddWithValue("bolumID",bolumID);
-            cmd.Parameters.AddWithValue("email", TextBoxemail.Text + "@" + ddlEmailProviders.SelectedItem);
-            cmd.Parameters.AddWithValue("sifre", TextBoxsifre.Text);
+            cmd.Parameters.AddWithValue("email", TextBoxemail.Text.Trim() + "@" + ddlEmailProviders.SelectedItem);
+            cmd.Parameters.AddWithValue("sifre", TextBoxsifre.Text.Trim());
             //cmd.Parameters.AddWithValue("sifre", MD5Olustur(TextBoxsifre.Text));
             DataRow drgiris = klas.GetDataRow(cmd);
             Session["RolID"] = drgiris["RolID"].ToString();
 
-            //if (drgiris != null)
-            if (true)
+            if (drgiris != null) 
             {
                 if (Convert.ToBoolean(drgiris["Aktif"]) == true && Convert.ToBoolean(drgiris["Engel"]) == false)
                 {
